@@ -134,3 +134,281 @@
 // 🎯 Prochaine étape : Tu es prêt pour Symfony/Laravel !
 //
 ?>
+<?php
+
+trait Attaquant
+{
+    public function attaquer($cible)
+    {
+        if (!$this->getEstVivant() || !$cible->getEstVivant()) {
+            return;
+        }
+        $degats = $this->attaque;
+        echo "⚔️ " . $this->getNom() . " attaque " . $cible->getNom() . " et inflige $degats dégâts !<br>";
+        $cible->recevoirDegats($degats);
+    }
+}
+
+abstract class Personnage
+{
+    private static $totalPersonnages = 0;
+    protected $nom;
+    protected $vie;
+    protected $attaque;
+    private $estVivant = true;
+
+    public function __construct($nom, $vie, $attaque)
+    {
+        self::$totalPersonnages++;
+        $this->nom = $nom;
+        $this->vie = $vie;
+        $this->attaque = $attaque;
+        $this->estVivant = true;
+        echo "✨ " . $this->nom . " entre dans l'arène ! (Vie: {$this->vie}, Attaque: {$this->attaque})<br>";
+    }
+    public function recevoirDegats($degats)
+    {
+        if (!$this->estVivant) return;
+        $this->vie -= $degats;
+        if ($this->vie <= 0) {
+            $this->vie = 0;
+            $this->estVivant = false;
+            echo "💀 " . $this->nom . " est KO !<br>";
+        } else {
+            echo "💔 " . $this->nom . " a {$this->vie} PV restants<br>";
+        }
+    }
+
+    public function getEstVivant()
+    {
+        return $this->estVivant;
+    }
+
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    public static function getTotalPersonnages()
+    {
+        return self::$totalPersonnages;
+    }
+
+    abstract public function crier();
+}
+class Guerrier extends Personnage
+{
+    use Attaquant;
+
+    public function __construct($nom)
+    {
+        parent::__construct($nom, 100, 20);
+    }
+
+    public function crier()
+    {
+        echo "🗡️ POUR L'HONNEUR !<br>";
+    }
+}
+class Mage extends Personnage
+{
+    use Attaquant;
+
+    public function __construct($nom)
+    {
+        parent::__construct($nom, 70, 35);
+    }
+
+    public function crier()
+    {
+        echo "🔮 PAR LA MAGIE !<br>";
+    }
+
+    public function sortSpecial($cible)
+    {
+        if (!$this->getEstVivant() || !$cible->getEstVivant()) return;
+        $degats = 50;
+        echo "✨ " . $this->nom . " lance BOULE DE FEU ! 💥<br>";
+        echo "🔥 " . $this->nom . " inflige $degats dégâts magiques à " . $cible->getNom() . " !<br>";
+        $cible->recevoirDegats($degats);
+    }
+}
+class Archer extends Personnage
+{
+    use Attaquant;
+
+    public function __construct($nom)
+    {
+        parent::__construct($nom, 80, 25);
+    }
+
+    public function crier()
+    {
+        echo "🏹 TIR MORTEL !<br>";
+    }
+}
+class Voleur extends Personnage
+{
+    use Attaquant;
+    public function __construct($nom)
+    {
+        parent::__construct($nom, 60, 30);
+    }
+    public function crier()
+    {
+        echo "🥷 Discrétion et rapidité !<br>";
+    }
+}
+class Paladin extends Personnage 
+{
+    use Attaquant;
+    public function __construct($nom)
+    {
+        parent::__construct($nom, 110, 18);
+    }
+    public function crier()
+    {
+        echo "🛡️ Je protège les innocents !<br>";
+    }
+}
+class Valkyrie extends Personnage 
+{
+    use Attaquant;
+    public function __construct($nom)
+    {
+        parent::__construct($nom, 120, 22);
+    }
+    public function crier()
+    {
+        echo "⚔️ Pour le Valhalla !<br>";
+    }
+}
+class Berserker extends Personnage 
+{
+    use Attaquant;
+    public function __construct($nom)
+    {
+        parent::__construct($nom, 90, 40);
+    }
+    public function crier()
+    {
+        echo "🔥 RAGE ET FUREUR !<br>";
+    }
+}
+class Sorciere extends Personnage
+{
+    use Attaquant;
+    public function __construct($nom)
+    {
+        parent::__construct($nom, 75, 38);
+    }
+    public function crier()
+    {
+        echo "🕸️ Ma magie est noire !<br>";
+    }
+    public function sortSpecial($cible)
+    {
+        if (!$this->getEstVivant() || !$cible->getEstVivant()) return;
+        $degats = 45;
+        echo "🧙‍♀️ " . $this->nom . " lance MALÉDICTION ! 💀<br>";
+        echo "⚡ " . $this->nom . " inflige $degats dégâts magiques à " . $cible->getNom() . " !<br>";
+        $cible->recevoirDegats($degats);
+    }
+}
+class Tireur extends Personnage
+{
+    use Attaquant;
+    public function __construct($nom)
+    {
+        parent::__construct($nom, 70, 32);
+    }
+    public function crier()
+    {
+        echo "🔫 La précision avant tout !<br>";
+    }
+}
+
+class Arene
+{
+    public function combat($perso1, $perso2)
+    {
+        echo "<br>";
+        echo "COMBAT : " . $perso1->getNom() . " VS " . $perso2->getNom() . "<br>";
+        $perso1->crier();
+        $perso2->crier();
+
+        $tour = 1;
+        while ($perso1->getEstVivant() && $perso2->getEstVivant()) {
+            echo "<br>--- Tour $tour ---<br>";
+            $perso1->attaquer($perso2);
+            if (!$perso2->getEstVivant()) break;
+            $perso2->attaquer($perso1);
+            $tour++;
+        }
+
+        $gagnant = null;
+        if ($perso1->getEstVivant()) {
+            echo "🏆 VICTOIRE DE " . $perso1->getNom() . " !<br>";
+            $gagnant = $perso1;
+        } elseif ($perso2->getEstVivant()) {
+            echo "🏆 VICTOIRE DE " . $perso2->getNom() . " !<br>";
+            $gagnant = $perso2;
+        } else {
+            echo "⚠️ Aucun gagnant, ils sont tous deux KO !<br>";
+        }
+        return $gagnant;
+    }
+}
+
+echo "🎮 JEU RPG - COMBAT D'ARÈNE<br>";
+echo "🏟️ BIENVENUE AU GRAND TOURNOI !<br><br>";
+
+$combattants = [
+    new Guerrier("Conan"),
+    new Mage("Gandalf"),
+    new Archer("Legolas"),
+    new Voleur("Tyrion l'Esquiveur"),
+    new Paladin("Arthur le Paladin"),
+    new Valkyrie("Hilda la Valkyrie"),
+    new Berserker("Ragnar le Berserker"),
+    new Sorciere("Morgane la Sorcière"),
+    new Tireur("Robin le Tireur"),
+];
+
+$arene = new Arene();
+echo "<br>--- DÉBUT DU TOURNOI ---<br>";
+
+$gagnant = $combattants[0];
+for ($i = 1; $i < count($combattants); $i++) {
+    if (!$gagnant->getEstVivant()) {
+        echo "<br>😵 Le précédent vainqueur est KO, le suivant prend sa place !<br>";
+        $gagnant = $combattants[$i];
+        continue;
+    }
+    $challenger = $combattants[$i];
+    echo "<br>NOUVEAU DUEL : " . $gagnant->getNom() . " VS " . $challenger->getNom() . "<br>";
+
+    if ($gagnant instanceof Mage && $challenger->getEstVivant()) {
+        echo "→ Gandalf utilise son sort spécial d'entrée !<br>";
+        $gagnant->sortSpecial($challenger);
+        sleep(1);
+    }
+    if ($gagnant instanceof Sorciere && $challenger->getEstVivant()) {
+        echo "→ Morgane lance sa malédiction !<br>";
+        $gagnant->sortSpecial($challenger);
+        sleep(1);
+    }
+    $vainqueur = $arene->combat($gagnant, $challenger);
+    if ($vainqueur) {
+        $gagnant = $vainqueur;
+        echo "<br>⚡ Le vainqueur poursuit le tournoi !<br>";
+    } else {
+        echo "Aucun vainqueur...<br>";
+        $gagnant = $challenger;
+    }
+    sleep(1);
+}
+echo "<br>=== TOURNOI TERMINÉ ===<br>";
+echo "Total de personnages créés : " . Personnage::getTotalPersonnages() . "<br>";
+echo "CHAMPION DE L'ARÈNE : " . ($gagnant ? $gagnant->getNom() : "Aucun (égalité)") . "<br>";
+?>
