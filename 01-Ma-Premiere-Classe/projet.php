@@ -84,3 +84,32 @@
 // 🎯 Prochaine étape : Projet 02 - Le Constructeur
 //
 ?>
+
+<?php
+class Voiture {
+    public $marque;
+    public $couleur;
+    public $vitesseMax;
+
+    public function demarrer() {
+        echo "🚗 Vrooooom ! La {$this->marque} démarre !\n";
+    }
+
+    public function klaxonner() {
+        echo "🎺 POUET POUET ! ({$this->couleur})\n";
+    }
+}
+$ferrari = new Voiture();
+$ferrari->marque = "Ferrari";
+$ferrari->couleur = "Rouge";
+$ferrari->vitesseMax = 320;
+$twingo = new Voiture();
+$twingo->marque = "Renault Twingo";
+$twingo->couleur = "Jaune";
+$twingo->vitesseMax = 150;
+$ferrari->demarrer();
+$ferrari->klaxonner();
+$twingo->demarrer();
+$twingo->klaxonner();
+echo "Vitesse max Ferrari : {$ferrari->vitesseMax} km/h\n";
+echo "Vitesse max Twingo : {$twingo->vitesseMax} km/h\n";
