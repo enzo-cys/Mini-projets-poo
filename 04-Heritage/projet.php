@@ -84,3 +84,50 @@
 // 🎯 Prochaine étape : Projet 05 - Le Polymorphisme (même méthode, comportements différents)
 //
 ?>
+<?php
+class Animal {
+    protected $nom;
+
+    public function __construct($nom) {
+        $this->nom = $nom;
+    }
+
+    public function manger() {
+        echo "🍖 {$this->nom} mange...<br>";
+    }
+
+    public function dormir() {
+        echo "😴 {$this->nom} dort... Zzz<br>";
+    }
+}
+class Chien extends Animal {
+    public function aboyer() {
+        echo "🐕 {$this->nom} : WOOF WOOF !<br>";
+    }
+}
+class Chat extends Animal {
+    public function miauler() {
+        echo "🐈 {$this->nom} : MIAOU !<br>";
+    }
+}
+class Oiseau extends Animal {
+    public function voler() {
+        echo "🦅 {$this->nom} vole dans le ciel !<br>";
+    }
+}
+$rex = new Chien("Rex");
+$minou = new Chat("Minou");
+$tweety = new Oiseau("Tweety");
+
+$rex->manger();
+$rex->dormir();
+$rex->aboyer();
+
+$minou->manger();
+$minou->dormir();
+$minou->miauler();
+
+$tweety->manger();
+$tweety->dormir();
+$tweety->voler();
+?>

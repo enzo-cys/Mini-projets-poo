@@ -99,3 +99,47 @@
 // 🎯 Prochaine étape : Projet 04 - L'Héritage (réutiliser du code)
 //
 ?>
+<?php 
+class Portefeuille {
+    private $proprietaire;
+    private $argentDisponible;
+
+    public function __construct($proprietaire, $argentInitial) {
+        $this->proprietaire = $proprietaire;
+        $this->argentDisponible = $argentInitial;
+        echo "👛 Portefeuille créé pour {$this->proprietaire} avec {$this->argentDisponible}€<br>";
+    }
+
+    public function getArgent() {
+        return $this->argentDisponible;
+    }
+
+    public function ajouterArgent($montant) {
+        if ($montant > 0) {
+            $this->argentDisponible += $montant;
+            echo "✅ Ajout de {$montant}€<br>";
+        } else {
+            echo "❌ Montant invalide !<br>";
+        }
+    }
+
+    public function retirerArgent($montant) {
+        if ($montant <= 0) {
+            echo "❌ Montant invalide !<br>";
+        } elseif ($montant <= $this->argentDisponible) {
+            $this->argentDisponible -= $montant;
+            echo "✅ Retrait de {$montant}€<br>";
+        } else {
+            echo "❌ Fonds insuffisants !<br>";
+        }
+    }
+}
+// Test du Portefeuille
+$monPortefeuille = new Portefeuille("Alex", 100);
+echo "Argent disponible : " . $monPortefeuille->getArgent() . "€<br>";
+$monPortefeuille->ajouterArgent(50);
+$monPortefeuille->retirerArgent(30);
+$monPortefeuille->retirerArgent(500);
+$monPortefeuille->ajouterArgent(-20);
+echo "Argent final : " . $monPortefeuille->getArgent() . "€<br>";
+?>

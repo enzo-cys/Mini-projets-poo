@@ -86,14 +86,14 @@ class CompteBancaire {
     public function __construct($titulaire, $soldeInitial) {
         $this->titulaire = $titulaire;
         $this->solde = $soldeInitial;
-        echo "✅ Compte créé pour {$this->titulaire} avec {$this->solde}€\n";
+        echo "✅ Compte créé pour {$this->titulaire} avec {$this->solde}€<br>";
     }
     public function deposer($montant) {
         $this->solde += $montant;
-        echo "💰 Dépôt de {$montant}€\n";
+        echo "💰 Dépôt de {$montant}€<br>";
     }
     public function afficherSolde() {
-        echo "💰 Solde de {$this->titulaire} : {$this->solde}€\n";
+        echo "💰 Solde de {$this->titulaire} : {$this->solde}€<br>";
     }
 }
 $compte1 = new CompteBancaire("Jean", 1000);

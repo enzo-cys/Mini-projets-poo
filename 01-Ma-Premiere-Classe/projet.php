@@ -92,11 +92,11 @@ class Voiture {
     public $vitesseMax;
 
     public function demarrer() {
-        echo "🚗 Vrooooom ! La {$this->marque} démarre !\n";
+        echo "🚗 Vrooooom ! La {$this->marque} démarre !<br>";
     }
 
     public function klaxonner() {
-        echo "🎺 POUET POUET ! ({$this->couleur})\n";
+        echo "🎺 POUET POUET ! ({$this->couleur})<br>";
     }
 }
 $ferrari = new Voiture();
@@ -111,5 +111,5 @@ $ferrari->demarrer();
 $ferrari->klaxonner();
 $twingo->demarrer();
 $twingo->klaxonner();
-echo "Vitesse max Ferrari : {$ferrari->vitesseMax} km/h\n";
-echo "Vitesse max Twingo : {$twingo->vitesseMax} km/h\n";
+echo "Vitesse max Ferrari : {$ferrari->vitesseMax} km/h<br>";
+echo "Vitesse max Twingo : {$twingo->vitesseMax} km/h<br>";

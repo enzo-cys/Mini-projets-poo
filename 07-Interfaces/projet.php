@@ -96,3 +96,67 @@
 // 🎯 Prochaine étape : Projet 08 - Traits (réutilisation horizontale)
 //
 ?>
+<?php
+interface PaymentInterface {
+    public function payer($montant);
+    public function rembourser($montant);
+}
+class CarteBancaire implements PaymentInterface {
+    private $numero;
+
+    public function __construct($numero) {
+        $this->numero = $numero;
+    }
+
+    public function payer($montant) {
+        $dernierChiffres = substr($this->numero, -4);
+        echo "💳 Paiement de {$montant}€ par carte ****{$dernierChiffres}<br>";
+    }
+
+    public function rembourser($montant) {
+        echo "💳 Remboursement de {$montant}€ sur la carte<br>";
+    }
+}
+class PayPal implements PaymentInterface {
+    private $email;
+
+    public function __construct($email) {
+        $this->email = $email;
+    }
+
+    public function payer($montant) {
+        echo "🅿️  Paiement PayPal de {$montant}€ via {$this->email}<br>";
+    }
+
+    public function rembourser($montant) {
+        echo "🅿️  Remboursement PayPal de {$montant}€<br>";
+    }
+}
+class Crypto implements PaymentInterface {
+    private $wallet;
+
+    public function __construct($wallet) {
+        $this->wallet = $wallet;
+    }
+
+    public function payer($montant) {
+        $debutWallet = substr($this->wallet, 0, 8);
+        echo "₿ Paiement crypto de {$montant}€ depuis wallet {$debutWallet}...<br>";
+    }
+
+    public function rembourser($montant) {
+        echo "₿ Remboursement crypto de {$montant}€<br>";
+    }
+}
+function traiterPaiement(PaymentInterface $methode, $montant) {
+    echo "🛒 COMMANDE : {$montant}€<br>";
+    $methode->payer($montant);
+    echo "✅ Paiement validé !<br>";
+}
+$carte = new CarteBancaire("1234567812345678");
+$paypal = new PayPal("jean@email.com");
+$crypto = new Crypto("1A2B3C4D5E6F7G8H9I10");
+traiterPaiement($carte, 100);
+traiterPaiement($paypal, 50);
+traiterPaiement($crypto, 75);
+?>

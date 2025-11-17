@@ -90,3 +90,39 @@
 // 🎯 Prochaine étape : Projet 11 - Autoload (chargement automatique)
 //
 ?>
+<?php
+namespace MonApp\Models {
+    class User {
+        private $nom;
+        public function __construct($nom) {
+            $this->nom = $nom;
+        }
+        public function afficher() {
+            echo "👤 Modèle User : {$this->nom}<br>";
+        }
+    }
+}
+namespace MonApp\Controllers {
+    class UserController {
+        public function index() {
+            echo "📋 Liste des utilisateurs<br>";
+        }
+    }
+}
+namespace {
+    use MonApp\Models\User;
+    use MonApp\Controllers\UserController;
+
+    $user = new User("Jean");
+    $user->afficher();
+
+    $controller = new UserController();
+    $controller->index();
+
+    $user2 = new User("Marie");
+    $user2->afficher();
+
+    $controller2 = new UserController();
+    $controller2->index();
+}
+?>
